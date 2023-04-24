@@ -1,7 +1,6 @@
 package ru.volkova.springcourse.RouteManagerRest.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,11 +10,13 @@ import ru.volkova.springcourse.RouteManagerRest.dto.OrdersResponse;
 import ru.volkova.springcourse.RouteManagerRest.models.Order;
 import ru.volkova.springcourse.RouteManagerRest.services.CustomersService;
 import ru.volkova.springcourse.RouteManagerRest.services.OrdersService;
-import ru.volkova.springcourse.RouteManagerRest.util.CustomerNotFoundException;
 import ru.volkova.springcourse.RouteManagerRest.util.converters.OrderConverter;
+import ru.volkova.springcourse.RouteManagerRest.util.exceptions.CustomerNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
+
+import static ru.volkova.springcourse.RouteManagerRest.util.ErrorUtil.returnErrorInfo;
 
 @RestController
 @RequestMapping("/orders")
@@ -47,7 +48,9 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody OrderDTO orderDTO,
                                              BindingResult bindingResult){
-        //TODO exceptions
+        if (bindingResult.hasErrors()){
+            returnErrorInfo(bindingResult);
+        }
         Order order = new Order();
         try {
         order.setCustomer(customersService.findOne(orderDTO.getCustomerId()));}

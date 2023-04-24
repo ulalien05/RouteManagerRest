@@ -5,11 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.volkova.springcourse.RouteManagerRest.models.Customer;
 import ru.volkova.springcourse.RouteManagerRest.repositories.CustomersRepository;
-import ru.volkova.springcourse.RouteManagerRest.util.converters.CustomerConverter;
+import ru.volkova.springcourse.RouteManagerRest.util.exceptions.CustomerNotFoundException;
 
 
 import java.util.List;
-
 
 
 @Service
@@ -20,7 +19,7 @@ public class CustomersService {
 
 
     @Autowired
-    public CustomersService(CustomersRepository customersRepository, CustomerConverter customerConverter) {
+    public CustomersService(CustomersRepository customersRepository) {
         this.customersRepository = customersRepository;
     }
 
@@ -29,7 +28,8 @@ public class CustomersService {
     }
 
     public Customer findOne(int id) {
-        return customersRepository.findById(id).orElse(new Customer());
+        return customersRepository.findById(id)
+                .orElseThrow(() -> new CustomerNotFoundException("Клиент не найден. Проверьте данные клиента или создайте нового."));
     }
 
     public List<Customer> findByNameContaining(String name){

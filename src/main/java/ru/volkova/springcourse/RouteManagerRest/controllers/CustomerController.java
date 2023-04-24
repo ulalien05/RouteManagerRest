@@ -5,17 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.volkova.springcourse.RouteManagerRest.dto.CustomerDTO;
 import ru.volkova.springcourse.RouteManagerRest.dto.CustomersResponse;
 import ru.volkova.springcourse.RouteManagerRest.services.CustomersService;
 import ru.volkova.springcourse.RouteManagerRest.util.converters.CustomerConverter;
 import ru.volkova.springcourse.RouteManagerRest.util.exceptions.CustomerErrorResponse;
-import ru.volkova.springcourse.RouteManagerRest.util.exceptions.CustomerNotCreatedException;
+import ru.volkova.springcourse.RouteManagerRest.util.exceptions.NotCreatedException;
 
-import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.volkova.springcourse.RouteManagerRest.util.ErrorUtil.returnErrorInfo;
 
 @RestController
 @RequestMapping("/customers")
@@ -33,7 +33,9 @@ public class CustomerController {
     @GetMapping
     public CustomersResponse getCustomers(){
 
-        return new CustomersResponse(customersService.findAll().stream().map(customerConverter::convertToCustomerDTO)
+        return new CustomersResponse(customersService.findAll()
+                .stream()
+                .map(customerConverter::convertToCustomerDTO)
                 .collect(Collectors.toList()));
     }
 
@@ -45,8 +47,10 @@ public class CustomerController {
 
     @GetMapping("/getByName/{name}")
     public CustomersResponse getCustomerByNameLike(@PathVariable("name") String name){
-        return new CustomersResponse(customersService.findByNameContaining(name).stream()
-                .map(customerConverter::convertToCustomerDTO).collect(Collectors.toList()));
+        return new CustomersResponse(customersService.findByNameContaining(name)
+                .stream()
+                .map(customerConverter::convertToCustomerDTO)
+                .collect(Collectors.toList()));
     }
 
 
@@ -54,21 +58,14 @@ public class CustomerController {
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid CustomerDTO customerDTO,
                                              BindingResult bindingResult){
     if (bindingResult.hasErrors()){
-        StringBuilder errorMessage = new StringBuilder();
-        List<FieldError> errors  = bindingResult.getFieldErrors();
-        for (FieldError error : errors){
-            errorMessage.append(error.getField())
-                    .append(" - ").append(error.getDefaultMessage())
-                    .append("; ");
-        }
-        throw new CustomerNotCreatedException(errorMessage.toString());
+        returnErrorInfo(bindingResult);
     }
     customersService.save(customerConverter.convertToCustomer(customerDTO));
     return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @ExceptionHandler
-    private ResponseEntity<CustomerErrorResponse> handleException(CustomerNotCreatedException ex){
+    private ResponseEntity<CustomerErrorResponse> handleException(NotCreatedException ex){
         CustomerErrorResponse response = new CustomerErrorResponse(
                 ex.getMessage(), System.currentTimeMillis()
         );
