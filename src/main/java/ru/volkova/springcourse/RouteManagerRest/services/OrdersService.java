@@ -3,8 +3,7 @@ package ru.volkova.springcourse.RouteManagerRest.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.volkova.springcourse.RouteManagerRest.models.Customer;
-import ru.volkova.springcourse.RouteManagerRest.models.Order;
+import ru.volkova.springcourse.RouteManagerRest.entities.Order;
 import ru.volkova.springcourse.RouteManagerRest.repositories.OrdersRepository;
 import ru.volkova.springcourse.RouteManagerRest.util.exceptions.OrderNotFoundException;
 
@@ -25,8 +24,8 @@ public class OrdersService {
         this.customersService = customersService1;
     }
 
-    public List<Order> getOrdersByCustomer(Customer customer){
-        return ordersRepository.findByCustomerId(customer.getId());
+    public List<Order> findOrdersByCustomerName(String customerName){
+        return ordersRepository.findByCustomerName(customerName);
     }
 
     public List<Order> findAll(){
@@ -38,6 +37,10 @@ public class OrdersService {
         return foundOrder.orElseThrow(OrderNotFoundException::new);
     }
 
+    public List<Order> findByDate(LocalDateTime date){
+        return ordersRepository.findByDate(date);
+    }
+
     @Transactional
     public void save(Order order){
         enrichOrder(order);
@@ -47,6 +50,17 @@ public class OrdersService {
     public void enrichOrder(Order order){
         order.setCustomer(customersService.findOne(order.getCustomer().getId()));
         order.setDate(LocalDateTime.now());
+    }
+
+    @Transactional
+    public void delete(int orderId){
+        ordersRepository.deleteById(orderId);
+    }
+
+    @Transactional
+    public void update(int id, Order order){
+        order.setId(id);
+        ordersRepository.save(order);
     }
 
 }

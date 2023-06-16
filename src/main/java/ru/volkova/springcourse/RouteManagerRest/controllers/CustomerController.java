@@ -1,7 +1,7 @@
 package ru.volkova.springcourse.RouteManagerRest.controllers;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,16 +19,11 @@ import static ru.volkova.springcourse.RouteManagerRest.util.ErrorUtil.returnErro
 
 @RestController
 @RequestMapping("/customers")
+@RequiredArgsConstructor
 public class CustomerController {
 
     private final CustomersService customersService;
     private final CustomerConverter customerConverter;
-
-    @Autowired
-    public CustomerController(CustomersService customersService, CustomerConverter customerConverter) {
-        this.customersService = customersService;
-        this.customerConverter = customerConverter;
-    }
 
     @GetMapping
     public CustomersResponse getCustomers(){

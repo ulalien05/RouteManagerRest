@@ -3,7 +3,7 @@ package ru.volkova.springcourse.RouteManagerRest.util.converters;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import ru.volkova.springcourse.RouteManagerRest.dto.CustomerDTO;
-import ru.volkova.springcourse.RouteManagerRest.models.Customer;
+import ru.volkova.springcourse.RouteManagerRest.entities.Customer;
 
 @Component
 public class CustomerConverter {

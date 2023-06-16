@@ -1,14 +1,18 @@
 package ru.volkova.springcourse.RouteManagerRest.repositories;
 
-import org.aspectj.weaver.ast.Or;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.volkova.springcourse.RouteManagerRest.models.Order;
+import ru.volkova.springcourse.RouteManagerRest.entities.Order;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface OrdersRepository extends JpaRepository<Order, Integer> {
 
-    List<Order> findByCustomerId(int customerId);
+    List<Order> findByCustomerName(String customerName);
+
+    List<Order> findByDate(LocalDateTime date);
+
+    void deleteById(int id);
 }

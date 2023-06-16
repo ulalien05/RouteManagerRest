@@ -1,7 +1,5 @@
 package ru.volkova.springcourse.RouteManagerRest.dto;
 
-import ru.volkova.springcourse.RouteManagerRest.models.Customer;
-
 import java.util.List;
 
 public class CustomersResponse {

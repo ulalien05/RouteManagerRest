@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import ru.volkova.springcourse.RouteManagerRest.dto.CustomerDTO;
 import ru.volkova.springcourse.RouteManagerRest.dto.OrderDTO;
-import ru.volkova.springcourse.RouteManagerRest.models.Customer;
-import ru.volkova.springcourse.RouteManagerRest.models.Order;
+import ru.volkova.springcourse.RouteManagerRest.entities.Customer;
+import ru.volkova.springcourse.RouteManagerRest.entities.Order;
 
 @Component
 public class OrderConverter {

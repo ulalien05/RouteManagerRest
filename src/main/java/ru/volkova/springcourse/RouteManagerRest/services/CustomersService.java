@@ -3,7 +3,7 @@ package ru.volkova.springcourse.RouteManagerRest.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.volkova.springcourse.RouteManagerRest.models.Customer;
+import ru.volkova.springcourse.RouteManagerRest.entities.Customer;
 import ru.volkova.springcourse.RouteManagerRest.repositories.CustomersRepository;
 import ru.volkova.springcourse.RouteManagerRest.util.exceptions.CustomerNotFoundException;
 
@@ -36,17 +36,17 @@ public class CustomersService {
         return customersRepository.findByNameContainingIgnoreCase(name);
     }
 
-    public List<Customer> findByName(String name){
-        return customersRepository.findByName(name);
-    }
-
-    public List<Customer> findByAddress(String address){
-        return customersRepository.findByAddress(address);
-    }
-
-    public List<Customer> findByPhone(String phone){
-        return customersRepository.findByPhone(phone);
-    }
+//    public List<Customer> findByName(String name){
+//        return customersRepository.findByName(name);
+//    }
+//
+//    public List<Customer> findByAddress(String address){
+//        return customersRepository.findByAddress(address);
+//    }
+//
+//    public List<Customer> findByPhone(String phone){
+//        return customersRepository.findByPhone(phone);
+//    }
 
     @Transactional
     public void save(Customer customer){
